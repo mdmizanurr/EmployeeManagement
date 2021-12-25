@@ -1,4 +1,21 @@
-﻿.btn{
-    width: 75px;
-
+﻿body{
+    background-color: whitesmoke;
 }
+
+.btn{
+    width: 75px;
+}
+
+.card-header{
+    background-color: #ddeeaa;
+}
+
+.card-img-top {
+    padding: 10px;
+    background-color: paleturquoise;
+}
+
+.card-footer{
+    background-color: peachpuff;
+}
+

@@ -1,30 +1,110 @@
-﻿@model Employee
+﻿@model EmployeeCreateViewModel
 
-@{ 
+
+@{
     ViewBag.Title = "Create Employee";
+    Layout = "_Layout";
 }
 
 
-<form asp-controller="Home" asp-action="Create" method="post" class="mt-3" >
+
+
+<script>
+
+    function clearForm(){
+
+        $("#Name").val('');
+        $("#Email").val('');
+        $("#Department").val('');      
+    };
+
+
+    $(document).ready( function(){
+
+       // alert("  ");
+
+        ////$("#saveBtn").click(function () {
+        ////   // alert("");
+
+        ////    var nameVal = $("#Name").val();
+        ////    if (nameVal.length <3) 
+        ////        alert("Add name more or equal 3");
+        ////    clearForm();
+        ////});
+
+       
+
+        $("#relativeList").empty();
+
+        $.ajax({
+            url: '@Url.Action("GetEmmp", "Home")',
+            type: "GET",          
+            success: (function (result) {
+                $("#relativeList").html(result);
+            }),
+            error: (function (result) {
+                alertWarning(result, "")
+            }),
+        });
+
+    });
+
+
+</script>
+
+
+<div class="col-md-12 no-padding">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div id="relativeList">
+        
+        </div>
+    </div>
+</div>
+
+
+
+<br />
+<form enctype="multipart/form-data" asp-controller="Home" asp-action="Create" method="post" class="mt-6">
+   @* <div asp-validation-summary="All" class="text-danger"></div>*@
     <div class="form-group row">
         <label asp-for="Name" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-4">        
-        <input asp-for="Name" class="form-control" placeholder="Name" />
+        <div class="col-sm-4">
+            <input asp-for="Name" class="form-control" placeholder="Enter Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group row">
         <label asp-for="Email" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-4">
-        <input asp-for="Email" class="form-control" placeholder="Email" />
+            <input asp-for="Email" class="form-control" placeholder="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group row">
         <label asp-for="Department" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-4">
             <select asp-for="Department" class="custom-select mr-sm-2"
-                    asp-items="Html.GetEnumSelectList<Dept>()"></select>
-        </div> </div>
-    <div>
-        <button type="submit" class="btn btn-primary">Create</button>
+                    asp-items="Html.GetEnumSelectList<Dept>()">
+                <option value="">Please select</option>
+            </select>
+            <span asp-validation-for="Department" class="text-danger"></span>
+        </div>
     </div>
+
+    <div class="form-group row">
+        <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <div class="custom-select">
+                <input asp-for="Photo" class="form-control custom-select" />
+                @*<label class="custom-select">Chose File....</label>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-10">
+            <button id="saveBtn" type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </div>
+
 </form>

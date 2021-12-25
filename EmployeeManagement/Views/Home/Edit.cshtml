@@ -1,0 +1,134 @@
+﻿@model EmployeeEditViewModel
+
+@{
+    ViewBag.Title = "Edit Page"; 
+    var photoPath = "~/images/" + (Model.ExistingPhotopath ?? "abc.png");
+}
+
+
+
+
+<script>
+
+    function clearForm(){
+
+        $("#Name").val('');
+        $("#Email").val('');
+        $("#Department").val('');      
+    };
+
+
+    $(document).ready( function(){
+
+       // alert("  ");
+
+        ////$("#saveBtn").click(function () {
+        ////   // alert("");
+
+        ////    var nameVal = $("#Name").val();
+        ////    if (nameVal.length <3) 
+        ////        alert("Add name more or equal 3");
+        ////    clearForm();
+        ////});
+
+       
+
+        $("#relativeList").empty();
+
+        $.ajax({
+            url: '@Url.Action("GetEmmp", "Home")',
+            type: "GET",          
+            success: (function (result) {
+                $("#relativeList").html(result);
+            }),
+            error: (function (result) {
+                alertWarning(result, "")
+            }),
+        });
+
+    });
+
+
+</script>
+
+
+<div class="col-md-12 no-padding">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div id="relativeList">
+        
+        </div>
+    </div>
+</div>
+
+
+
+<br />
+<form enctype="multipart/form-data" asp-controller="Home" asp-action="Edit" method="post" class="mt-6">
+   @* <div asp-validation-summary="All" class="text-danger"></div>*@
+
+   <input hidden asp-for="Id" />
+   <input hidden asp-for="ExistingPhotopath" />
+
+    <div class="form-group row">
+        <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <input asp-for="Name" class="form-control" placeholder="Enter Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <input asp-for="Email" class="form-control" placeholder="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Department" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-4">
+            <select asp-for="Department" class="custom-select mr-sm-2"
+                    asp-items="Html.GetEnumSelectList<Dept>()">
+                <option value="">Please select</option>
+            </select>
+            <span asp-validation-for="Department" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Photo" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input multiple asp-for="Photo" class="form-control custom-file-input" placeholder="click here to change photo" />
+               
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row col-sm-4 offset-4">
+        <img src="@photoPath" class="imageThumbnail" asp-append-version="true" />
+    </div>
+    
+    <div class="form-group">
+        <div class="col-sm-10">
+            <button id="saveBtn" type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function(){
+            $('.custom-file-input').on('change', function(){
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('custom-file-label').html(fileName);
+            });
+        });
+    </script>
+
+}
+
