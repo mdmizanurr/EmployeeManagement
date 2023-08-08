@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Models;
 using EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,7 @@ namespace EmployeeManagement.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IHostingEnvironment hostingEnvironment;
 
+        public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment)
 
         public const string SessionKeyName = "_Name";
         private readonly ILogger<HomeController> _logger;
@@ -26,6 +28,7 @@ namespace EmployeeManagement.Controllers
         public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
             _employeeRepository = employeeRepository;
+            this.hostingEnvironment = hostingEnvironment;
             this.hostingEnvironment = hostingEnvironment;
             _logger = logger;  
         }
@@ -58,6 +61,38 @@ namespace EmployeeManagement.Controllers
         [HttpGet]
         public ViewResult Create()
         {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Create([Bind(include:"Name, Email, Department, Photo")]EmployeeCreateViewModel model)
+        {          
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = null;
+                if(model.Photo != null)
+                {
+                    string uploadsFolder =  Path.Combine(hostingEnvironment.WebRootPath, "images");
+                    uniqueFileName =  Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                    string filePath =  Path.Combine(uploadsFolder, uniqueFileName);
+                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                }
+
+                Employee newEmployee = new Employee
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Department = model.Department,
+                    PhotoPath = uniqueFileName
+                };
+
+                _employeeRepository.Add(newEmployee);
+
+                return RedirectToAction( "Details", new { id = newEmployee.Id });
+            }
+
+            return View();
             return View();
         }
 
@@ -154,6 +189,8 @@ namespace EmployeeManagement.Controllers
 
             return View();
         }
+
+
 
 
 

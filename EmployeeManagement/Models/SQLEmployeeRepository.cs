@@ -23,6 +23,7 @@ namespace EmployeeManagement.Models
         public Employee Delete(int id)
         {
             Employee employee = context.Employees.Find(id);
+            if(employee!= null)
 
             if(employee != null)
             {

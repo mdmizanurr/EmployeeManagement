@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+
+
 
 namespace EmployeeManagement
 {
@@ -38,6 +39,12 @@ namespace EmployeeManagement
                 options.Cookie.IsEssential = true;
             });
 
+            services.AddDbContextPool<AppDbContext>(options => 
+                options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
+
+            services.AddMvc();
+          
+            services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -54,6 +61,10 @@ namespace EmployeeManagement
             app.UseAuthorization();
 
             app.UseSession();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
