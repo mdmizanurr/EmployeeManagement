@@ -2,59 +2,157 @@
 
 @{
     ViewBag.Title = "Employee List";
-    
+
 }
-    
 
-<div class="card-group">
 
-<div class="card-group">
-    @foreach (var employee in Model)
-    {
-        var photoPath = "~/images/" + (employee.PhotoPath ?? "abc.png");
+@*<div class="card-group">
 
-    <div class="col-md-3">
-        <div class="card m-3">
-            <div class="card-header text-center">
-                <h3>@employee.Name</h3>
+    <div class="card-group">
+        @foreach (var employee in Model)
+        {
+            var photoPath = "~/images/" + (employee.PhotoPath ?? "abc.png");
+
+            <div class="col-md-3">
+                <div class="card m-3">
+                    <div class="card-header text-center">
+                        <h3>@employee.Name</h3>
+                    </div>
+                    <img class="card-img-top" src="@photoPath" asp-append-version="true" ` />
+                    <div class="card-footer text-center">
+                        <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id"
+                           class="btn btn-primary m-1">View</a>
+                        <a asp-action="Edit" asp-controller="Home" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
+                        <a href="#" class="btn btn-danger m-1">Delete</a>
+                    </div>
+                </div>
+
             </div>
-            <img class="card-img-top" src="@photoPath" asp-append-version="true" ` />
-            <div class="card-footer text-center">
-                <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id"
-                   class="btn btn-primary m-1">View</a>
-                <a href="#" class="btn btn-primary m-1">Edit</a>
-                <a href="#" class="btn btn-danger m-1">Delete</a>
-            </div>
-        </div>
+        }
 
     </div>
-        }
-        var photoPath = "~/images/" + (employee.PhotoPath ?? "abc.png");
 
-        <div class="col-md-3">
-            <div class="card m-3">
-                <div class="card-header text-center">
-                    <h3>@employee.Name</h3>
-                </div>
-                <img class="card-img-top" src="@photoPath" asp-append-version="true" ` />
-                <div class="card-footer text-center">
-                    <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id"
-                       class="btn btn-primary m-1">View</a>
-                    <a asp-action="Edit" asp-controller="Home" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
-                    <a href="#" class="btn btn-danger m-1">Delete</a>
-                </div>
-            </div>
+    <hr />
+    <p>Below Section</p>
 
-        </div>
-    }
+
 
 </div>
 
+*@
 
 
-@section Scripts{
+<script>
+
+    // Emp Load
+    function LoadEmp() {
+
+        let uri = '@Url.Action("GetEmmp","Home")';
+
+        $.ajax({
+            type: "GET",
+            url: uri /*'Url.Action("GetEmmp","Home")'*/,
+            contentType: "application/json;charset=utf-8",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                let placeHolder = document.querySelector('#empList');
+                let out = "";
+                $.each(data, function (index, item) {
+                    //console.log(item);
+
+                    out += `
+                                        <tr>
+                                            <td>${item.id} </td> <td>${item.name} </td> <td>${item.email} </td>
+                                        </tr>
+                                        `;
+                });
+                placeHolder.innerHTML = out;
+            },
+            error: function () { alert('error....'); }
+        });
+    }
+
+
+    $(document).ready(function () {
+
+        LoadEmp();
+
+        // alert();
+
+        //var uri ='Url.Action("GetEmmp","Home")';
+
+        //fetch(uri).then( function(response){
+        //    return response.json();
+        //}).then(function(products){
+        //    let placeHolder = document.querySelector("#empList");
+        //    let out = "";
+        //    debugger
+        //    for(let product of products){
+        //        out += `
+        //            <tr>
+        //                <td>${product.Name}</td>
+        //                <td>${product.Email}</td>
+        //            </tr>
+
+
+        //        `;
+        //    }
+
+        //    placeHolder.innerHTML = out;
+
+        //})
+
+        //function LoadEmp(){
+        //    $.ajax({
+        //        type: "GET",
+        //        url: 'Url.Action("GetEmmp","Home")',
+        //        contentType: "application/json;charset=utf-8",
+        //        data: {},
+        //        dataType: "json",
+        //        success: function (data) {
+        //            let placeHolder = document.querySelector('#empList');
+        //            let out = "";
+        //            $.each(data, function (index, item) {
+        //                //console.log(item);
+
+        //                out += `
+        //                            <tr>
+        //                                <td>${item.id} </td> <td>${item.name} </td> <td>${item.email} </td>
+        //                            </tr>
+        //                            `;
+        //            });
+        //            placeHolder.innerHTML = out;
+        //        },
+        //        error: function () { alert('error....'); }
+        //    });
+        //}
+       
+       
+            
+       
+
+
+    });
+
+</script>
+
+<p>Test</p>
+<table class="table table-solid">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody id="empList"></tbody>
+</table>
+
+
+@*@section Scripts{
 
     <script type="text/javascript" src="~/js/Custom Script.js" asp-append-version="true"></script>
 
 
-}
+}*@

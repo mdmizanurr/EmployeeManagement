@@ -35,16 +35,11 @@ namespace EmployeeManagement
             services.AddSession(options =>
             {                
                 options.Cookie.Name = ".EmployeeManagment.Session";
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+              //  options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddDbContextPool<AppDbContext>(options => 
-                options.UseSqlServer(_config.GetConnectionString("EmployeeDbConnection")));
-
-            services.AddMvc();
-          
-            services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
+         
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
