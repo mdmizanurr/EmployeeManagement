@@ -18,7 +18,7 @@
                     <div class="card-header text-center">
                         <h3>@employee.Name</h3>
                     </div>
-                    <img class="card-img-top" src="@photoPath" asp-append-version="true" ` />
+                    <img class="card-img-top" src="@photoPath" asp-append-version="true" />
                     <div class="card-footer text-center">
                         <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id"
                            class="btn btn-primary m-1">View</a>
@@ -42,13 +42,12 @@
 *@
 
 
-<script>
+<script type="text/javascript">
 
     // Emp Load
     function LoadEmp() {
-
+      //  alert();
         let uri = '@Url.Action("GetEmmp","Home")';
-
         $.ajax({
             type: "GET",
             url: uri /*'Url.Action("GetEmmp","Home")'*/,
@@ -59,24 +58,25 @@
                 let placeHolder = document.querySelector('#empList');
                 let out = "";
                 $.each(data, function (index, item) {
-                    //console.log(item);
-
-                    out += `
-                                        <tr>
-                                            <td>${item.id} </td> <td>${item.name} </td> <td>${item.email} </td>
-                                        </tr>
-                                        `;
+                    //   console.log(item);
+                    out += `<tr>
+                        <td>${item.name} </td>
+                        <td>${item.email} </td>
+                        <td> <img src='../../images/${item.photoPath}' style="width:50px; height:50px;"> </td>
+                        <td> <a class="btn btn-primary" href="/home/edit?id=${item.id}">edit</a> </td>
+                        </tr>`;
                 });
                 placeHolder.innerHTML = out;
             },
             error: function () { alert('error....'); }
         });
-    }
-
+    };
 
     $(document).ready(function () {
 
         LoadEmp();
+
+
 
         // alert();
 
@@ -127,32 +127,38 @@
         //        error: function () { alert('error....'); }
         //    });
         //}
-       
-       
-            
-       
+
+
+
+
 
 
     });
 
 </script>
 
+
 <p>Test</p>
-<table class="table table-solid">
+
+
+<table class="table table-solid table-hover">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Image</th>
+            <th>Edit</th>
         </tr>
     </thead>
-    <tbody id="empList"></tbody>
+    <tbody id="empList">
+    </tbody>
 </table>
 
 
-@*@section Scripts{
+
+@* @section Scripts{
 
     <script type="text/javascript" src="~/js/Custom Script.js" asp-append-version="true"></script>
 
 
-}*@
+} *@

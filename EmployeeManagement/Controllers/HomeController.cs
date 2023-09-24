@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,7 @@ namespace EmployeeManagement.Controllers
         public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
             _employeeRepository = employeeRepository;
-            this.hostingEnvironment = hostingEnvironment;
-            this.hostingEnvironment = hostingEnvironment;
+            this.hostingEnvironment = hostingEnvironment;         
             _logger = logger;  
         }
 
@@ -42,15 +42,25 @@ namespace EmployeeManagement.Controllers
             //    HttpContext.Session.SetString(SessionKeyName, "Mizan");
             //}
 
-            var model = _employeeRepository.GetAllEmployee();
-            return View(model);
+            //var model = _employeeRepository.GetAllEmployee();
+            //return View(model);
+            return View();
         }
 
         public ViewResult Details(int? id)
         {
+            Employee employee = _employeeRepository.GetEmployee(id.Value);
+
+            if(employee == null)
+            {
+                Response.StatusCode = 404;
+                return View("EmployeeNotFound", id.Value);
+            }
+
+
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
             {
-                Employee = _employeeRepository.GetEmployee(id ?? 1),
+                Employee = employee,
                 PageTitle = "Employee Details"
             };       
 
