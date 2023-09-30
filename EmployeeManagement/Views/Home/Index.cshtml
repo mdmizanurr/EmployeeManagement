@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Employee>
 
 @{
+    Layout = "_Layout";
     ViewBag.Title = "Employee List";
 
 }
@@ -46,7 +47,7 @@
 
     // Emp Load
     function LoadEmp() {
-      //  alert();
+     //   alert();
         let uri = '@Url.Action("GetEmmp","Home")';
         $.ajax({
             type: "GET",
@@ -72,10 +73,11 @@
         });
     };
 
+
+    // Document Load
+
     $(document).ready(function () {
-
         LoadEmp();
-
 
 
         // alert();
@@ -156,9 +158,6 @@
 
 
 
-@* @section Scripts{
-
+@section Scripts{
     <script type="text/javascript" src="~/js/Custom Script.js" asp-append-version="true"></script>
-
-
-} *@
+}
